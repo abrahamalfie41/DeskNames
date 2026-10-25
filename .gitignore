@@ -1,0 +1,12 @@
+# Local build products and scratch files
+/work/
+.build/
+.swiftpm/
+*.app/
+/outputs/*.zip
+/outputs/*.dmg
+
+# Finder metadata and editor state
+.DS_Store
+xcuserdata/
+*.xcuserstate

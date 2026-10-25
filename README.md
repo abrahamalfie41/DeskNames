@@ -15,17 +15,16 @@ A native macOS menu bar app for naming, finding, switching, and managing desktop
 
 Requires an **Apple Silicon Mac (M1 or later)** running **macOS 13 or later**.
 
-1. [Download **DeskNames.dmg**](https://github.com/abrahamalfie41/DeskNames/releases/latest/download/DeskNames.dmg).
-2. Open the downloaded disk image.
-3. Drag **DeskNames** onto **Applications** in the installer window.
-4. Launch **DeskNames** from Applications. Its desktop name and icon appear in the menu bar.
-5. Open **System Settings → Privacy & Security → Accessibility** and enable **DeskNames**. If it is missing, click **+** and choose DeskNames from Applications. Quit and reopen the app if access does not take effect immediately.
+**[Download DeskNames.dmg](https://github.com/abrahamalfie41/DeskNames/releases/latest/download/DeskNames.dmg)**
+
+> **First launch — macOS security warning:** DeskNames is locally signed and is not Apple-notarized. If macOS says Apple could not verify it, click **Done** rather than **Move to Trash**. After moving the app to Applications and trying to open it, go to **System Settings → Privacy & Security**, scroll to **Security**, click **Open Anyway**, and confirm **Open**. Only do this if you trust the download. This adds an exception for DeskNames; you do not need to disable Gatekeeper. [Apple’s instructions](https://support.apple.com/en-us/102445).
+
+1. Open the downloaded disk image.
+2. Drag **DeskNames** onto **Applications** in the installer window.
+3. Launch **DeskNames** from Applications. Its desktop name and icon appear in the menu bar.
+4. Open **System Settings → Privacy & Security → Accessibility** and enable **DeskNames**. If it is missing, click **+** and choose DeskNames from Applications. Quit and reopen the app if access does not take effect immediately.
 
 No build tools or terminal commands are needed. Download **DeskNames.dmg** to install the app.
-
-### If macOS blocks the first launch
-
-The build is locally signed and is not Apple-notarized. If you trust the source, first try opening the app, then go to **System Settings → Privacy & Security → Open Anyway** and confirm.
 
 ### Desktop switching setup
 

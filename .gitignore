@@ -3,8 +3,7 @@
 .build/
 .swiftpm/
 *.app/
-/outputs/*.zip
-/outputs/*.dmg
+/dist/
 
 # Finder metadata and editor state
 .DS_Store
@@ -12,7 +11,7 @@ xcuserdata/
 *.xcuserstate
 
 # Maintainer-only local build script; releases are built by GitHub Actions
-/outputs/DeskNames/build.sh
+/build.sh
 
 # Python packaging-tool caches
 __pycache__/

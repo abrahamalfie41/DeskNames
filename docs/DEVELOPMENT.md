@@ -4,7 +4,7 @@ A native macOS menu bar app for naming, finding, switching, and managing desktop
 
 ## Open
 
-Open `DeskNames.app` next to this source folder. The current desktop name appears in the menu bar. Click it to open the desktop panel. Click a row to jump directly, or its pencil button to edit the name, color, and icon. Changes are saved automatically.
+Open `dist/DeskNames.app` after building, or install the app from the DMG release. The current desktop name appears in the menu bar. Click it to open the desktop panel. Click a row to jump directly, or its pencil button to edit the name, color, and icon. Changes are saved automatically.
 
 For switching, enable **DeskNames** in **System Settings → Privacy & Security → Accessibility**. DeskNames uses the configured **Switch to Desktop N** shortcuts. Disabled shortcuts are enabled only briefly and restored afterward. If a shortcut has no key assigned, assign one under **Keyboard → Keyboard Shortcuts → Mission Control**. You can reach Accessibility from the app menu.
 
@@ -25,7 +25,11 @@ To start at login, turn on **Open at Login** in **⋯ → Settings**. DeskNames 
 
 Install the app using **DeskNames.dmg** from [GitHub Releases](https://github.com/abrahamalfie41/DeskNames/releases/latest). Open the disk image and drag DeskNames to Applications. The installer contains the app and an Applications shortcut; no build script is distributed to users.
 
-Maintainers build releases with the **Package macOS release** GitHub Actions workflow. It compiles and locally signs the Apple Silicon app, runs feature and routing checks, creates and verifies the styled DMG, and publishes it as a release asset. The release-only packaging dependencies are separate from the app; DeskNames itself has no third-party runtime dependencies. The Swift package remains available for source development.
+Maintainers build releases with the **Package macOS release** GitHub Actions workflow. It compiles and locally signs the Apple Silicon app, runs feature and routing checks, creates and verifies the styled DMG, and uploads it as a workflow artifact. Enable **Publish a new GitHub release after verification** and choose a new tag to also publish it as a release asset. The release-only packaging dependencies are separate from the app; DeskNames itself has no third-party runtime dependencies. The Swift package remains available for source development.
+
+## Repository paths
+
+The Swift package is at the repository root, with app code in `Sources/DeskNames/` and icon artwork in `Resources/`. The release tools are in `tools/`. Build products go in the ignored `dist/` directory; caches and intermediate files go in the ignored `work/` directory. A local maintainer `build.sh`, if present, is not published. Run the workflow without publication enabled to validate build and packaging changes without altering an existing release.
 
 ## Verification
 

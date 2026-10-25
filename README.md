@@ -49,4 +49,17 @@ Direct switching supports regular desktops 1–16. Full-screen app Spaces remain
 
 DeskNames uses private macOS APIs to read Spaces and configured desktop shortcuts. macOS updates may affect compatibility. On multiple displays, keep the pointer on the display you want to switch.
 
-See the [project documentation](outputs/DeskNames/README.md) for implementation details and verification commands.
+See the [project documentation](docs/DEVELOPMENT.md) for implementation details and verification commands.
+
+## Repository layout
+
+```text
+Sources/DeskNames/       App code and feature checks
+Resources/              App icon source
+Package.swift           Swift package definition
+tools/                  Release packaging tools
+.github/workflows/      Automated build and DMG release
+docs/                   Development documentation
+dist/                   Generated app and installers (ignored by Git)
+work/                   Local caches and temporary files (ignored by Git)
+```

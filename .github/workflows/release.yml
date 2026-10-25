@@ -7,6 +7,10 @@ on:
         description: Release tag
         required: true
         default: v0.3.0
+      publish_release:
+        description: Publish a new GitHub release after verification
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -23,41 +27,42 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
+      - name: Verify root Swift package
+        run: swift package describe --type json
       - name: Build and locally sign the Apple Silicon app
-        working-directory: outputs/DeskNames
         shell: zsh {0}
         run: |
           set -euo pipefail
-          DESKNAMES_CACHE="../../work/DeskNames-build/cache-$(pwd | cksum | awk '{print $1}')"
+          DESKNAMES_CACHE="work/DeskNames-build/cache-$(pwd | cksum | awk '{print $1}')"
           mkdir -p "$DESKNAMES_CACHE"
           # Some Command Line Tools installations ship duplicate SwiftBridging module maps.
           # A compiler-only overlay avoids changing the installed toolchain.
           EXTRA_FLAGS=()
           if [[ -f /Library/Developer/CommandLineTools/usr/include/swift/module.modulemap && -f /Library/Developer/CommandLineTools/usr/include/swift/bridging.modulemap ]]; then
-              mkdir -p ../../work/toolchain
-              print '// Provided by bridging.modulemap' > ../../work/toolchain/empty.modulemap
+              mkdir -p work/toolchain
+              print '// Provided by bridging.modulemap' > work/toolchain/empty.modulemap
               python3 - <<'PYOVERLAY'
           import json, os
-          folder = os.path.abspath("../../work/toolchain")
+          folder = os.path.abspath("work/toolchain")
           with open(folder + "/overlay.json", "w") as out:
               json.dump({"version": 0, "roots": [{"type": "file", "name": "/Library/Developer/CommandLineTools/usr/include/swift/module.modulemap", "external-contents": folder + "/empty.modulemap"}]}, out)
           PYOVERLAY
-              EXTRA_FLAGS=(-vfsoverlay ../../work/toolchain/overlay.json)
+              EXTRA_FLAGS=(-vfsoverlay work/toolchain/overlay.json)
           fi
-          swiftc "${EXTRA_FLAGS[@]}" -O -swift-version 5 -module-cache-path "$DESKNAMES_CACHE" -target arm64-apple-macosx13.0 Sources/DeskNames/*.swift -o ../../work/DeskNames-build/DeskNames
-          APP="${DESKNAMES_APP_OUTPUT:-../DeskNames.app}"
+          swiftc "${EXTRA_FLAGS[@]}" -O -swift-version 5 -module-cache-path "$DESKNAMES_CACHE" -target arm64-apple-macosx13.0 Sources/DeskNames/*.swift -o work/DeskNames-build/DeskNames
+          APP="${DESKNAMES_APP_OUTPUT:-dist/DeskNames.app}"
           mkdir -p "$APP/Contents/MacOS" "$APP/Contents/Resources"
-          DESKNAMES_ICONSET="../../work/DeskNames.iconset"
+          DESKNAMES_ICONSET="work/DeskNames.iconset"
           mkdir -p "$DESKNAMES_ICONSET"
           for points in 16 32 128 256 512; do
               sips -z "$points" "$points" Resources/AppIcon.png --out "$DESKNAMES_ICONSET/icon_${points}x${points}.png" >/dev/null
               pixels=$((points * 2))
               sips -z "$pixels" "$pixels" Resources/AppIcon.png --out "$DESKNAMES_ICONSET/icon_${points}x${points}@2x.png" >/dev/null
           done
-          DESKNAMES_ICNS="../../work/DeskNames-build/AppIcon.icns"
-          python3 Resources/package_icon.py "$DESKNAMES_ICONSET" "$DESKNAMES_ICNS"
+          DESKNAMES_ICNS="work/DeskNames-build/AppIcon.icns"
+          python3 tools/package_icon.py "$DESKNAMES_ICONSET" "$DESKNAMES_ICNS"
           cp "$DESKNAMES_ICNS" "$APP/Contents/Resources/AppIcon.icns"
-          cp ../../work/DeskNames-build/DeskNames "$APP/Contents/MacOS/DeskNames"
+          cp work/DeskNames-build/DeskNames "$APP/Contents/MacOS/DeskNames"
           cat > "$APP/Contents/Info.plist" <<'PLIST'
           <?xml version="1.0" encoding="UTF-8"?>
           <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
@@ -77,20 +82,21 @@ jobs:
           codesign --force --sign - "$APP"
       - name: Verify desktop features and routing
         run: |
-          outputs/DeskNames.app/Contents/MacOS/DeskNames --check-features
-          outputs/DeskNames.app/Contents/MacOS/DeskNames --check-routing
-          codesign --verify --verbose outputs/DeskNames.app
+          dist/DeskNames.app/Contents/MacOS/DeskNames --check-features
+          dist/DeskNames.app/Contents/MacOS/DeskNames --check-routing
+          codesign --verify --verbose dist/DeskNames.app
       - name: Install packaging tools
         run: python -m pip install Pillow==11.0.0 ds-store==1.3.1 mac-alias==2.2.2
       - name: Create and verify drag-to-Applications DMG
-        run: python tools/package_dmg.py --app outputs/DeskNames.app --output outputs/DeskNames.dmg
+        run: python tools/package_dmg.py --app dist/DeskNames.app --output dist/DeskNames.dmg
       - name: Upload DMG for review
         uses: actions/upload-artifact@v4
         with:
           name: DeskNames-dmg
-          path: outputs/DeskNames.dmg
+          path: dist/DeskNames.dmg
           if-no-files-found: error
       - name: Publish GitHub release
+        if: inputs.publish_release
         env:
           GH_TOKEN: ${{ github.token }}
           RELEASE_TAG: ${{ inputs.tag }}
@@ -109,4 +115,4 @@ jobs:
 
           See the repository README for setup and keyboard shortcuts. The source-code archives below are optional; **DeskNames.dmg** is the app installer.
           NOTES
-          gh release create "$RELEASE_TAG" outputs/DeskNames.dmg --target "$GITHUB_SHA" --title "DeskNames ${RELEASE_TAG#v}" --notes-file "$RUNNER_TEMP/release-notes.md" --latest
+          gh release create "$RELEASE_TAG" dist/DeskNames.dmg --target "$GITHUB_SHA" --title "DeskNames ${RELEASE_TAG#v}" --notes-file "$RUNNER_TEMP/release-notes.md" --latest

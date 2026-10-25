@@ -27,8 +27,9 @@ for points in 16 32 128 256 512; do
     pixels=$((points * 2))
     sips -z "$pixels" "$pixels" Resources/AppIcon.png --out "$DESKNAMES_ICONSET/icon_${points}x${points}@2x.png" >/dev/null
 done
-python3 Resources/package_icon.py "$DESKNAMES_ICONSET" Resources/AppIcon.icns
-cp Resources/AppIcon.icns "$APP/Contents/Resources/AppIcon.icns"
+DESKNAMES_ICNS="../../work/DeskNames-build/AppIcon.icns"
+python3 Resources/package_icon.py "$DESKNAMES_ICONSET" "$DESKNAMES_ICNS"
+cp "$DESKNAMES_ICNS" "$APP/Contents/Resources/AppIcon.icns"
 cp ../../work/DeskNames-build/DeskNames "$APP/Contents/MacOS/DeskNames"
 cat > "$APP/Contents/Info.plist" <<'PLIST'
 <?xml version="1.0" encoding="UTF-8"?>

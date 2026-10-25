@@ -72,7 +72,7 @@ The executable supports **--check-features** (search, keyboard navigation, short
 
 ## App icon
 
-The app includes a custom white capital D on a muted slate-blue gradient tile, generated with the built-in image generator. The original PNG, generation prompt, and packaged ICNS are in `Resources/`. The build creates all required macOS icon sizes and includes the icon in the app bundle.
+The app includes a custom white capital D on a muted slate-blue gradient tile, generated with the built-in image generator. The source image is `Resources/AppIcon.png`. The build creates the required icon sizes and ICNS under the ignored `work/` folder and includes the generated icon in the app bundle.
 
 ## Help window
 
@@ -83,8 +83,6 @@ The app includes a custom white capital D on a muted slate-blue gradient tile, g
 Settings includes an Open at Login toggle backed by `SMAppService.mainApp`. Enabling registers the running app; disabling unregisters it. The toggle reads macOS’s real status when Settings opens and when DeskNames becomes active. A pending approval is labeled explicitly with a Review button, and registration errors restore the actual state and display an inline message. Registration is only changed when the user operates the toggle. The Help window no longer instructs users to add the app manually in System Settings.
 
 Login-item state handling is covered by `--check-features` using an injected simulated service, including enable/disable, failed registrations, pending approval, and external state changes. These checks do not register a real login item or verify launch at the next login.
-
-The refined icon uses a calmer palette and simpler shading. Original artwork is retained as `Resources/AppIcon-v1.png`; the refined source is `Resources/AppIcon-v2.png`, with its edit prompt in `Resources/IconPrompt-v2.txt`. `Resources/AppIcon.png` is the active build asset.
 
 ## New Desktop shortcut
 

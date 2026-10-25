@@ -13,34 +13,15 @@ A native macOS menu bar app for naming, finding, switching, and managing desktop
 
 ## Installation
 
-### Requirements
+Requires an **Apple Silicon Mac (M1 or later)** running **macOS 13 or later**.
 
-- An Apple Silicon Mac (M1 or later) running macOS 13 or later. The current build script targets Apple Silicon only.
-- Apple's Command Line Tools, Git, and Python 3 to build from source.
-
-### Build and install
-
-There is currently no prebuilt GitHub release. Build the app from source:
-
-1. Install Apple's Command Line Tools if needed:
-
-   ```sh
-   xcode-select --install
-   ```
-
-2. Clone the repository and build:
-
-   ```sh
-   git clone https://github.com/abrahamalfie41/DeskNames.git
-   cd DeskNames
-   ./outputs/DeskNames/build.sh
-   ```
-
-3. In Finder, open the repository's `outputs` folder and drag **DeskNames.app** into **Applications**.
-4. Launch **DeskNames** from Applications. Its desktop name and icon appear in the menu bar.
+1. [Download **DeskNames.dmg**](https://github.com/abrahamalfie41/DeskNames/releases/latest/download/DeskNames.dmg).
+2. Open the downloaded disk image.
+3. Drag **DeskNames** onto **Applications** in the installer window.
+4. Eject the DeskNames disk image, then launch **DeskNames** from Applications. Its desktop name and icon appear in the menu bar.
 5. Open **System Settings → Privacy & Security → Accessibility** and enable **DeskNames**. If it is missing, click **+** and choose DeskNames from Applications. Quit and reopen the app if access does not take effect immediately.
 
-The build also produces `outputs/DeskNames.zip`. If you receive that ZIP, extract it and follow steps 3–5. These instructions use a normal app bundle; there is no DMG installer.
+No build tools or terminal commands are needed. For updates, quit DeskNames before replacing the app in Applications. The GitHub source-code archives are for developers; download **DeskNames.dmg** to install the app.
 
 ### If macOS blocks the first launch
 

@@ -10,3 +10,10 @@
 .DS_Store
 xcuserdata/
 *.xcuserstate
+
+# Maintainer-only local build script; releases are built by GitHub Actions
+/outputs/DeskNames/build.sh
+
+# Python packaging-tool caches
+__pycache__/
+*.pyc

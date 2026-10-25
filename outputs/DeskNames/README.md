@@ -21,9 +21,11 @@ To start at login, turn on **Open at Login** in **⋯ → Settings**. DeskNames 
 - Private SkyLight APIs enumerate desktops and invoke their configured shortcuts. These can change with macOS updates; this app is intended for personal use and is not a Mac App Store build.
 - No network access, third-party packages, window capture, or background helper.
 
-## Build
+## Build and release
 
-Run `./build.sh` on an Apple Silicon Mac with Apple's Command Line Tools. It writes `../DeskNames.app`, signs it locally, and packages it as `../DeskNames.zip`. The included Swift package also supports opening the source in an editor. The interface uses native SwiftUI and AppKit with automatic light and dark appearance.
+Install the app using **DeskNames.dmg** from [GitHub Releases](https://github.com/abrahamalfie41/DeskNames/releases/latest). Open the disk image and drag DeskNames to Applications. The installer contains the app and an Applications shortcut; no build script is distributed to users.
+
+Maintainers build releases with the **Package macOS release** GitHub Actions workflow. It compiles and locally signs the Apple Silicon app, runs feature and routing checks, creates and verifies the styled DMG, and publishes it as a release asset. The release-only packaging dependencies are separate from the app; DeskNames itself has no third-party runtime dependencies. The Swift package remains available for source development.
 
 ## Verification
 
